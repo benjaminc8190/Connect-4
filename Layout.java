@@ -13,6 +13,7 @@ import java.awt.event.*;
 //Frontend of the game
 
 public class Layout extends JFrame {
+    private Game game; //Composition relationship: Layout has a Game
     public Layout(){
 
     }
