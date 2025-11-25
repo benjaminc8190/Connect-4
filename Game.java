@@ -13,8 +13,8 @@ import java.awt.event.*;
 //Logic of the game
 
 public class Game{
-    private final int rows = 6;
-    private final int cols = 7;
+    private final int rows = 5;
+    private final int cols = 5;
     private int[][] board;
     private int turns;
 
