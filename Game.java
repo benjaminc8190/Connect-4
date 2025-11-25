@@ -10,10 +10,13 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-//Implements and runs the game
+//Logic of the game
 
-public class Runner[
-    public static void main(String[] args){
-        
+public class Game{
+    private Layout frame;
+    int[][] board = new int[6][7];
+
+    public Game(){
+
     }
-]
+}

@@ -10,6 +10,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+//Frontend of the game
 
 public class Layout extends JFrame {
     public Layout(){
