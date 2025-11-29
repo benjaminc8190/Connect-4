@@ -18,7 +18,6 @@ public class Game{
     private final int cols = 5;
     private int[][] board;
     private int turns;
-    private boolean playerWin;
 
     public Game(){
         board = new int[rows][cols];
