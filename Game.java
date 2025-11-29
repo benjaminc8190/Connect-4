@@ -1,66 +1,9 @@
-///*
-// * CSCI 185 M02
-// * Fall 2025
-// * Final Programming Project
-// * Author: Benjamin Chau, Anthony Coates, Jeffrey Perez
-// * Date: 11/24/2025
-// */
-/* old code
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-
-//Logic of the game
-
-public class Game{
-    private final int rows = 5;
-    private final int cols = 5;
-    private int[][] board;
-    private int turns;
-
-    public Game(){
-        board = new int[rows][cols];
-        System.out.println(board);
-    }
-
-    public int getCurrentPlayer(){
-        if(turns%2==0){
-            System.out.println("Player 1 turn");
-            return 1;
-        } else {
-            System.out.println("Player 2 turn");
-            return 2;
-        }
-    }
-
-    public void dropPiece(int cols){
-        for(int i=board.length; i>0; i--){
-            if(board[i][cols]==0){
-                board[i][cols]=this.getCurrentPlayer();
-            }
-        }
-    }
-
-    //Testing to see if board works
-    public void printBoard() {
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols; col++) {
-            System.out.print(board[row][col] + " ");
-        }
-        System.out.println();
-    }
-    System.out.println(); // extra line for spacing
-}
-
-}
-*/
-
 package P1;
 // * CSCI 185 M02
 // * Fall 2025
 // * Final Programming Project
 // * Author: Benjamin Chau, Anthony Coates, Jeffrey Perez
-// * Date: 11/24/2025
+// * Date: 11/29/2025
 // */
 
 import java.awt.*;
@@ -75,6 +18,7 @@ public class Game{
     private final int cols = 5;
     private int[][] board;
     private int turns;
+    private boolean playerWin;
 
     public Game(){
         board = new int[rows][cols];
@@ -92,10 +36,10 @@ public class Game{
     }
 
     public void dropPiece(int cols){
-        for(int i=board.length; i>0; i--){
+        for(int i=rows-1; i>=0; i--){ // Had to change .length to rows-1 in order for it to place pieces in 0 row
             if(board[i][cols]==0){
                 board[i][cols]=this.getCurrentPlayer();
-                turns++;
+                turns++; // Goes to next turn
                 return;
             }
         }
@@ -113,9 +57,7 @@ public class Game{
     
 }
     
-    // Anthony's Part
-    
-    
+// Anthony's Part
 public void GameStart() {
 	Scanner scanner = new Scanner(System.in); // Reads User Input 	
 	
@@ -133,27 +75,37 @@ public void GameStart() {
         continue; // ask again
     }
 
-    dropPiece(colChoice); //Uses dropPiece();
-    break;
+    dropPiece(colChoice); // Uses dropPiece();
+    printBoard(); // Prints the board
+    CheckWin(); // Plays Mechanism
+    if (CheckWin() == true) { // If there is the win condition
+    	turns--;  //Reverts the current turn order
+    	System.out.println("Player " + getCurrentPlayer() + " Wins!"); // Prints the winner
+    	break; //Breaks
+    }
+    else {
+    	continue; // Otherwise play as normal
+    	}
 	}
 }
 
 public boolean CheckWin() {
-    // Loop over every row and col
-    for (int row = 0; row < rows; row++) {
+	
+    // Loops and Checks every row and column
+    for (int row = 0; row < rows; row++) { 
         for (int col = 0; col < cols; col++) {
 
-            if (board[row][col] == 0) {
+            if (board[row][col] == 0) { // Empty Grid
             	continue;
             }
 
-            int hold = board[row][col];
+            int hold = board[row][col]; //Placeholder Variable that can store all conditions at once when checking
             // Horizontal
             if ( col <= cols - 4 &&
             board[row][col+1] == hold &&
             board[row][col+2] == hold &&
             board[row][col+3] == hold) {
-            	return true;
+            	return true; 
             }
             // Vertical
             if ( row <= rows - 4 &&
@@ -176,17 +128,16 @@ public boolean CheckWin() {
             board[row+3][col-3] == hold) {
             	return true;
             }
-            if (CheckWin() == true) {
-            	System.out.println("Player" + getCurrentPlayer() + "Wins!");
-            }
         }
     }
-    return false;
+  return false;
 }
 
 public static void main(String[] args) {
-	Game g = new Game();
-	g.printBoard();
-	g.GameStart();
+	Game g = new Game(); // Game Object
+	g.printBoard(); // Prints Board
+	g.GameStart(); // Starts Game
 	}
 }
+
+// !! Updating with replay system !!
