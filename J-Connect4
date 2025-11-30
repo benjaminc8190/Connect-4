@@ -7,13 +7,14 @@ public class Connect4 extends JFrame{
 	private static final int COLS = 5;
 	private static final int TO_WIN = 4;
 	
-	private char[][] board = new char[ROWS][COLS];
-	private JButton[] colButtons = new JButton[COLS];
+	private char[][] board = new char[ROWS][COLS]; //board itself
+	private JButton[] colButtons = new JButton[COLS]; // buttons are on the columns
 	private CellLabel[][] cells = new CellLabel[ROWS][COLS];
 	
 	private JButton reButton;
 	private char currentPlayer = 'X';
-	
+
+	//title of game and board size
 	public Connect4() {
 		setTitle("5x5 Connect 4");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,13 +47,13 @@ public class Connect4 extends JFrame{
 				colButtons[c] = btn;
 				buttonPanel.add(btn);
 			}
-			
+			//button for reset
 			reButton = new JButton("Restart");
 			reButton.setFont(new Font("Arial", Font.BOLD, 18));
 			reButton.addActionListener(e -> resetGame());
 			
 			topPanel.add(buttonPanel, BorderLayout.CENTER);
-			topPanel.add(reButton, BorderLayout.EAST);
+			topPanel.add(reButton, BorderLayout.EAST); //position of button for reset
 			  JPanel boardPanel = new JPanel(new GridLayout(ROWS, COLS));
 		        for (int r = 0; r < ROWS; r++) {
 		            for (int c = 0; c < COLS; c++) {
@@ -64,7 +65,7 @@ public class Connect4 extends JFrame{
 		        add(topPanel, BorderLayout.NORTH);
 		        add(boardPanel, BorderLayout.CENTER);
 		    }
-
+			//case for where the board is full
 		    private void handleMove(int col) {
 		        int row = dropPiece(col, currentPlayer);
 		        if (row == -1) {
@@ -73,22 +74,23 @@ public class Connect4 extends JFrame{
 		        }
 
 		        updateBoardUI();
-
+				//who wins is decided by the current player and if they meet the win conditions
 		        if (checkWin(row, col, currentPlayer)) {
 		            disableColumnButtons();
 		            JOptionPane.showMessageDialog(this, "Player " + currentPlayer + " wins!");
 		            return;
 		        }
-
+				//if the board is full, no one wins 
 		        if (isFull()) {
 		            JOptionPane.showMessageDialog(this, "It's a draw!");
 		            disableColumnButtons();
 		            return;
 		        }
-
+				//player is either x or o (switcher)
 		        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
 		    }
 
+			//dropped piece instead of placed piece as that is how the game is in real life
 		    private int dropPiece(int col, char player) {
 		        for (int r = ROWS - 1; r >= 0; r--) {
 		            if (board[r][col] == '.') {
@@ -99,6 +101,7 @@ public class Connect4 extends JFrame{
 		        return -1;
 		    }
 
+			
 		    private void updateBoardUI() {
 		        for (int r = 0; r < ROWS; r++)
 		            for (int c = 0; c < COLS; c++)
@@ -157,14 +160,14 @@ public class Connect4 extends JFrame{
 		    // cell UI
 		    class CellLabel extends JLabel {
 		        private char piece = '.';
-		        //color of container like the plastic grid in the real game
+		        //color of background grid, like in the real game
 		        public CellLabel() {
 		            setOpaque(true);
 		            setBackground(Color.BLUE.darker());
 		            setHorizontalAlignment(SwingConstants.CENTER);
 		            setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		        }
-		        //when pieces is placed change color
+		        //when pieces are placed change color 
 		        public void setPiece(char p) {
 		            piece = p;
 		            repaint();
@@ -198,3 +201,125 @@ public class Connect4 extends JFrame{
 	}
 
 }
+
+
+
+
+//for reference  c++ code 
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int ROWS = 5;
+const int COLS = 5;
+const int TO_WIN = 4;
+
+char board[ROWS][COLS];
+
+void initBoard() {
+    for (int r = 0; r < ROWS; r++)
+        for (int c = 0; c < COLS; c++)
+            board[r][c] = '.';
+}
+
+void printBoard() {
+    cout << "\n  ";
+    for (int c = 0; c < COLS; c++) cout << c << " ";
+    cout << "\n";
+
+    for (int r = 0; r < ROWS; r++) {
+        cout << r << " ";
+        for (int c = 0; c < COLS; c++)
+            cout << board[r][c] << " ";
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+int dropPiece(int col, char player) {
+    if (col < 0 || col >= COLS) return -1;
+
+    for (int r = ROWS - 1; r >= 0; r--) {
+        if (board[r][col] == '.') {
+            board[r][col] = player;
+            return r;
+        }
+    }
+    return -1; // column full
+}
+
+int countDir(int r, int c, int dr, int dc, char p) {
+    int count = 0;
+    r += dr;
+    c += dc;
+
+    while (r >= 0 && r < ROWS && c >= 0 && c < COLS && board[r][c] == p) {
+        count++;
+        r += dr;
+        c += dc;
+    }
+    return count;
+}
+
+bool checkWin(int r, int c, char p) {
+    int dirs[4][2] = { {0,1}, {1,0}, {1,1}, {1,-1} };
+
+    for (auto &d : dirs) {
+        int count = 1;  // include starting piece
+        count += countDir(r, c, d[0], d[1], p);
+        count += countDir(r, c, -d[0], -d[1], p);
+        if (count >= TO_WIN)
+            return true;
+    }
+    return false;
+}
+
+bool isFull() {
+    for (int c = 0; c < COLS; c++)
+        if (board[0][c] == '.') return false;
+    return true;
+}
+
+int main() {
+    initBoard();
+    char currentPlayer = 'X';
+
+    cout << "Welcome to 5x5 Connect 4 (C++ version)!\n";
+    printBoard();
+
+    while (true) {
+        int col;
+        cout << "Player " << currentPlayer << ", choose column (0-" << COLS - 1 << "): ";
+        
+        if (!(cin >> col)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid input. Enter a number.\n";
+            continue;
+        }
+
+        int row = dropPiece(col, currentPlayer);
+        if (row == -1) {
+            cout << "Column is full or invalid. Try again.\n";
+            continue;
+        }
+
+        printBoard();
+
+        if (checkWin(row, col, currentPlayer)) {
+            cout << "Player " << currentPlayer << " wins!\n";
+            break;
+        }
+
+        if (isFull()) {
+            cout << "It's a draw!\n";
+            break;
+        }
+
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    return 0;
+}
+
