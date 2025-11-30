@@ -6,9 +6,6 @@ package P1;
 // * Date: 11/29/2025
 // */
 
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
 import java.util.Scanner;
 
 //Logic of the game
@@ -21,7 +18,7 @@ public class Game{
 
     public Game(){
         board = new int[rows][cols];
-        System.out.println(board);
+        turns = 0;
     }
 
     public int getCurrentPlayer(){
