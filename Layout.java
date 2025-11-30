@@ -37,8 +37,22 @@ public class Layout extends JFrame {
 
                 buttons[i][j].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        //Button click logic goes here
-                        game.dropPiece(col); // Drop piece in the selected column
+                        // Handle each button click
+                        int[][] b = game.getBoard();//grabs current board state
+                        if(game.dropPiece(col)){// Drop piece in the selected column
+                            // Update button colors based on the game board state
+                            for (int r = 0; r < 5; r++) {
+                                for (int c = 0; c < 5; c++) {
+                                    if (b[r][c] == 1) {
+                                        buttons[r][c].setBackground(Color.RED);
+                                    } else if (b[r][c] == 2) {
+                                        buttons[r][c].setBackground(Color.YELLOW);
+                                    } else {
+                                        buttons[r][c].setBackground(Color.WHITE);
+                                    }
+                                }
+                            }
+                        }; 
                         game.printBoard();
                     }
                 });

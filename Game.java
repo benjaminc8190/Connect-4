@@ -31,14 +31,21 @@ public class Game{
         }
     }
 
-    public void dropPiece(int cols){
+    public boolean dropPiece(int col){
         for(int i=rows-1; i>=0; i--){ // Had to change .length to rows-1 in order for it to place pieces in 0 row
-            if(board[i][cols]==0){
-                board[i][cols]=this.getCurrentPlayer();
+            if(board[i][col]==0){
+                board[i][col]=this.getCurrentPlayer();
                 turns++; // Goes to next turn
-                return;
+                System.out.println("dropPiece(): Piece placed at (" + i + ", " + col + ")");
+                return true;
             }
         }
+        System.out.println("dropPiece(): Column " + col + " is full");
+        return false; // Column is full
+    }
+
+    public int[][] getBoard() {
+        return board;
     }
 
     //Testing to see if board works 
