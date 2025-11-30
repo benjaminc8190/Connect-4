@@ -8,11 +8,16 @@
 
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.*;
 
 //Frontend of the game
 
 public class Layout extends JFrame {
+    private Game game; // Instance of the Game class to manage game logic
+
     public Layout(){
+        game = new Game(); // Initialize the game logic
+
         //Set up for the grid layout
         setLayout(new GridLayout(5, 5, 5, 5));
         setTitle("Connect4 Game");
@@ -25,8 +30,19 @@ public class Layout extends JFrame {
             }
         }
         setSize(500, 500);
-        setVisible(true);
 
-        
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                final int col = j; // Need final variable for use in inner class
+
+                buttons[i][j].addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        //Button click logic goes here
+                        game.dropPiece(col); // Drop piece in the selected column
+                        game.printBoard();
+                    }
+                });
+            }
+        }
     }
 }
