@@ -1,0 +1,200 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class Connect4 extends JFrame{
+	
+	private static final int ROWS = 5;
+	private static final int COLS = 5;
+	private static final int TO_WIN = 4;
+	
+	private char[][] board = new char[ROWS][COLS];
+	private JButton[] colButtons = new JButton[COLS];
+	private CellLabel[][] cells = new CellLabel[ROWS][COLS];
+	
+	private JButton reButton;
+	private char currentPlayer = 'X';
+	
+	public Connect4() {
+		setTitle("5x5 Connect 4");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(500,650);
+		setLayout(new BorderLayout());
+		setLocationRelativeTo(null);
+		
+		initBoard();
+		initUI();
+		
+	}
+		
+		private void initBoard() {
+			for (int r = 0; r < ROWS; r++)
+				for (int c = 0; c < COLS; c++)
+					board[r][c] = '.';		
+		}
+	
+		private void initUI() {
+			
+			//top of the board is where you'll be able to click on buttons to drop the pieces and also restart the game
+			JPanel topPanel = new JPanel(new BorderLayout());
+			
+			JPanel buttonPanel = new JPanel(new GridLayout(1, COLS));
+			for (int c = 0; c < COLS; c++) {
+				JButton btn = new JButton("↓");
+				int col = c;
+				btn.setFont(new Font("Arial", Font.BOLD, 22));
+				btn.addActionListener(e -> handleMove(col));
+				colButtons[c] = btn;
+				buttonPanel.add(btn);
+			}
+			
+			reButton = new JButton("Restart");
+			reButton.setFont(new Font("Arial", Font.BOLD, 18));
+			reButton.addActionListener(e -> resetGame());
+			
+			topPanel.add(buttonPanel, BorderLayout.CENTER);
+			topPanel.add(reButton, BorderLayout.EAST);
+			  JPanel boardPanel = new JPanel(new GridLayout(ROWS, COLS));
+		        for (int r = 0; r < ROWS; r++) {
+		            for (int c = 0; c < COLS; c++) {
+		                cells[r][c] = new CellLabel();
+		                boardPanel.add(cells[r][c]);
+		            }
+		        }
+
+		        add(topPanel, BorderLayout.NORTH);
+		        add(boardPanel, BorderLayout.CENTER);
+		    }
+
+		    private void handleMove(int col) {
+		        int row = dropPiece(col, currentPlayer);
+		        if (row == -1) {
+		            JOptionPane.showMessageDialog(this, "Column is full!", "Invalid Move", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+
+		        updateBoardUI();
+
+		        if (checkWin(row, col, currentPlayer)) {
+		            disableColumnButtons();
+		            JOptionPane.showMessageDialog(this, "Player " + currentPlayer + " wins!");
+		            return;
+		        }
+
+		        if (isFull()) {
+		            JOptionPane.showMessageDialog(this, "It's a draw!");
+		            disableColumnButtons();
+		            return;
+		        }
+
+		        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+		    }
+
+		    private int dropPiece(int col, char player) {
+		        for (int r = ROWS - 1; r >= 0; r--) {
+		            if (board[r][col] == '.') {
+		                board[r][col] = player;
+		                return r;
+		            }
+		        }
+		        return -1;
+		    }
+
+		    private void updateBoardUI() {
+		        for (int r = 0; r < ROWS; r++)
+		            for (int c = 0; c < COLS; c++)
+		                cells[r][c].setPiece(board[r][c]);
+		    }
+
+		    private boolean isFull() {
+		        for (int c = 0; c < COLS; c++)
+		            if (board[0][c] == '.')
+		                return false;
+		        return true;
+		    }
+
+		    private void disableColumnButtons() {
+		        for (JButton btn : colButtons)
+		            btn.setEnabled(false);
+		    }
+
+		    private void enableColumnButtons() {
+		        for (JButton btn : colButtons)
+		            btn.setEnabled(true);
+		    }
+
+		    // restart game logic
+		    private void resetGame() {
+		        initBoard();
+		        updateBoardUI();
+		        enableColumnButtons();
+		        currentPlayer = 'X';
+		    }
+
+		    // win checking
+		    private boolean checkWin(int r, int c, char p) {
+		        int[][] dirs = {{0,1}, {1,0}, {1,1}, {1,-1}};
+		        for (int[] d : dirs) {
+		            int count = 1;
+		            count += countDir(r, c, d[0], d[1], p);
+		            count += countDir(r, c, -d[0], -d[1], p);
+		            if (count >= TO_WIN)
+		                return true;
+		        }
+		        return false;
+		    }
+
+		    private int countDir(int r, int c, int dr, int dc, char p) {
+		        int cnt = 0;
+		        int rr = r + dr, cc = c + dc;
+		        while (rr >= 0 && rr < ROWS && cc >= 0 && cc < COLS && board[rr][cc] == p) {
+		            cnt++;
+		            rr += dr;
+		            cc += dc;
+		        }
+		        return cnt;
+		    }
+
+		    // cell UI
+		    class CellLabel extends JLabel {
+		        private char piece = '.';
+		        //color of container like the plastic grid in the real game
+		        public CellLabel() {
+		            setOpaque(true);
+		            setBackground(Color.BLUE.darker());
+		            setHorizontalAlignment(SwingConstants.CENTER);
+		            setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		        }
+		        //when pieces is placed change color
+		        public void setPiece(char p) {
+		            piece = p;
+		            repaint();
+		        }
+
+		        @Override
+		        protected void paintComponent(Graphics g) {
+		            super.paintComponent(g);
+
+		            int size = Math.min(getWidth(), getHeight()) - 20;
+		            int x = (getWidth() - size) / 2;
+		            int y = (getHeight() - size) / 2;
+		            
+		            //color of pieces, and spaces with no pieces
+		            if (piece == 'X') {
+		                g.setColor(Color.RED);
+		            } else if (piece == 'O') {
+		                g.setColor(Color.YELLOW);
+		            } else {
+		                g.setColor(Color.WHITE);
+		            }
+		            g.fillOval(x, y, size, size);
+		        }
+		    }
+
+		    public static void main(String[] args) {
+		        SwingUtilities.invokeLater(() -> {
+		            Connect4 game = new Connect4();
+		            game.setVisible(true);
+		        });
+	}
+
+}
