@@ -60,7 +60,7 @@ public class Game{
 }
     
 // Anthony's Part
-public void GameStart() {
+public void gameStart() {//Use scanner to test code before partners integrate to GUI
 	Scanner scanner = new Scanner(System.in); // Reads User Input 	
 	
 	while (true) {
@@ -79,8 +79,7 @@ public void GameStart() {
 
     dropPiece(colChoice); // Uses dropPiece();
     printBoard(); // Prints the board
-    CheckWin(); // Plays Mechanism
-    if (CheckWin() == true) { // If there is the win condition
+    if (checkWin() == true) { // If there is the win condition
     	turns--;  //Reverts the current turn order
     	System.out.println("Player " + getCurrentPlayer() + " Wins!"); // Prints the winner
     	break; //Breaks
@@ -91,7 +90,7 @@ public void GameStart() {
 	}
 }
 
-public boolean CheckWin() {
+public boolean checkWin() {
 	
     // Loops and Checks every row and column
     for (int row = 0; row < rows; row++) { 
@@ -138,7 +137,7 @@ public boolean CheckWin() {
 public static void main(String[] args) {
 	Game g = new Game(); // Game Object
 	g.printBoard(); // Prints Board
-	g.GameStart(); // Starts Game
+	g.gameStart(); // Starts Game
 	}
 }
 
