@@ -1,4 +1,3 @@
-package P1;
 // * CSCI 185 M02
 // * Fall 2025
 // * Final Programming Project
