@@ -54,6 +54,7 @@ public class Layout extends JFrame {
                             }
                         }; 
                         game.printBoard();
+                        game.checkWin();
                     }
                 });
             }
