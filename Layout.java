@@ -26,15 +26,17 @@ public class Layout extends JFrame {
             for (int j = 0; j < 5; j++) {
                 buttons[i][j] = new JButton();
                 buttons[i][j].setBackground(Color.WHITE);
+                buttons[i][j].setOpaque(true);
                 add(buttons[i][j]);//top left is (0,0) to bottom right (4,4)
             }
         }
         setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                final int col = j; // Need final variable for use in inner class
-
+        for (int j = 0; j < 5; j++) {
+            final int col = j; // Need final variable for use in inner class
+            
+            for (int i = 0; i < 5; i++) {
                 buttons[i][j].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         // Handle each button click 
@@ -52,7 +54,7 @@ public class Layout extends JFrame {
                                     }
                                 }
                             }
-                        }; 
+                        }
                         game.printBoard();
                         game.checkWin();
                     }
