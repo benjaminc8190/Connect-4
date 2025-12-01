@@ -1,3 +1,4 @@
+//translated version with AI also GUI
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -285,7 +286,7 @@ int main() {
     initBoard();
     char currentPlayer = 'X';
 
-    cout << "Welcome to 5x5 Connect 4 (C++ version)!\n";
+    cout << "Welcome to 5x5 Connect 4 (C++ version)\n";
     printBoard();
 
     while (true) {
