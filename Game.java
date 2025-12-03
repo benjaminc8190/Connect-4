@@ -49,96 +49,111 @@ public class Game{
 
     //Testing to see if board works 
     public void printBoard() {
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols; col++) {
-            System.out.print(board[row][col] + " ");
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                System.out.print(board[row][col] + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
+        System.out.println(); // extra line for spacing 
     }
-    System.out.println(); // extra line for spacing
     
-}
-    
-// Anthony's Part
-public void gameStart() {//Use scanner to test code before partners integrate to GUI
-	Scanner scanner = new Scanner(System.in); // Reads User Input 	
-	
-	while (true) {
-        System.out.println("Player " + getCurrentPlayer() + ", choose a column (0-4):");
-        int colChoice = scanner.nextInt(); // Made colChoice as to differentiate with cols
+    // Anthony's Part
+    public void gameStart() {
+        Scanner scanner = new Scanner(System.in); // Reads User Input 	
         
-    if (colChoice < 0 || colChoice >= cols) { // colChoice can't be -1 or over 4
-        System.out.println("Invalid column. Try again.");
-        continue; // ask again
-    }
+        while (true) {
+            System.out.println("Player " + getCurrentPlayer() + ", choose a column (0-4):");
+            int colChoice = scanner.nextInt(); // Made colChoice as to differentiate with cols
+            
+        if (colChoice < 0 || colChoice >= cols) { // colChoice can't be -1 or over 4
+            System.out.println("Invalid column. Try again.");
+            continue; // ask again
+        }
 
-    if (board[0][colChoice] != 0) { // Needed a way to check the column is full.
-        System.out.println("Column full. Choose another.");
-        continue; // ask again
-    }
+        if (board[0][colChoice] != 0) { // Needed a way to check the column is full.
+            System.out.println("Column full. Choose another.");
+            continue; // ask again
+        }
 
-    dropPiece(colChoice); // Uses dropPiece();
-    printBoard(); // Prints the board
-    if (checkWin() == true) { // If there is the win condition
-    	turns--;  //Reverts the current turn order
-    	System.out.println("Player " + getCurrentPlayer() + " Wins!"); // Prints the winner
-    	break; //Breaks
-    }
-    else {
-    	continue; // Otherwise play as normal
-    	}
-	}
-}
-
-public boolean checkWin() {
-	
-    // Loops and Checks every row and column
-    for (int row = 0; row < rows; row++) { 
-        for (int col = 0; col < cols; col++) {
-
-            if (board[row][col] == 0) { // Empty Grid
-            	continue;
-            }
-
-            int hold = board[row][col]; //Placeholder Variable that can store all conditions at once when checking
-            // Horizontal
-            if ( col <= cols - 4 &&
-            board[row][col+1] == hold &&
-            board[row][col+2] == hold &&
-            board[row][col+3] == hold) {
-            	return true; 
-            }
-            // Vertical
-            if ( row <= rows - 4 &&
-            board[row+1][col] == hold &&
-            board[row+2][col] == hold &&
-            board[row+3][col] == hold) {
-            	return true;
-            }
-            // Dia-Left
-            if ( row <= rows - 4 && col <= cols - 4 &&
-            board[row+1][col+1] == hold &&
-            board[row+2][col+2] == hold &&
-            board[row+3][col+3] == hold) {
-            	return true;
-            }
-            // Dia-Right
-            if ( row <= rows - 4 && col >= 3 &&
-            board[row+1][col-1] == hold &&
-            board[row+2][col-2] == hold &&
-            board[row+3][col-3] == hold) {
-            	return true;
+        dropPiece(colChoice); // Uses dropPiece();
+        printBoard(); // Prints the board
+        CheckWin(); // Plays Mechanism
+        if (CheckWin() == true) { // If there is the win condition
+            turns--;  //Reverts the current turn order
+            System.out.println("Player " + getCurrentPlayer() + " Wins!"); // Prints the winner
+            break; //Breaks
+        }
+        else {
+            continue; // Otherwise play as normal
             }
         }
     }
-  return false;
-}
 
-public static void main(String[] args) {
-	Game g = new Game(); // Game Object
-	g.printBoard(); // Prints Board
-	g.gameStart(); // Starts Game
-	}
+    public boolean CheckWin() {
+        
+        // Loops and Checks every row and column
+        for (int row = 0; row < rows; row++) { 
+            for (int col = 0; col < cols; col++) {
+
+                if (board[row][col] == 0) { // Empty Grid
+                    continue;
+                }
+
+                int hold = board[row][col]; //Placeholder Variable that can store all conditions at once when checking
+                // Horizontal
+                if ( col <= cols - 4 &&
+                board[row][col+1] == hold &&
+                board[row][col+2] == hold &&
+                board[row][col+3] == hold) {
+                    return true; 
+                }
+                // Vertical
+                if ( row <= rows - 4 &&
+                board[row+1][col] == hold &&
+                board[row+2][col] == hold &&
+                board[row+3][col] == hold) {
+                    return true;
+                }
+                // Dia-Left
+                if ( row <= rows - 4 && col <= cols - 4 &&
+                board[row+1][col+1] == hold &&
+                board[row+2][col+2] == hold &&
+                board[row+3][col+3] == hold) {
+                    return true;
+                }
+                // Dia-Right
+                if ( row <= rows - 4 && col >= 3 &&
+                board[row+1][col-1] == hold &&
+                board[row+2][col-2] == hold &&
+                board[row+3][col-3] == hold) {
+                    return true;
+                }
+            }
+        }
+    return false;
+    }
+
+    public boolean stopGame() {
+        if (CheckWin() == true) {
+            System.out.println("Player " + (getCurrentPlayer()-1) + " Wins!");
+            return true;
+        }
+        return false;
+
+    }
+
+    public void resetGame() {
+        board = new int[rows][cols];
+        turns = 0;
+    }
+
+// public static void main(String[] args) {
+// 	Game g = new Game(); // Game Object
+// 	g.printBoard(); // Prints Board
+// 	g.gameStart(); // Starts Game
+// 	}
+
 }
 
 // !! Updating with replay system !!
