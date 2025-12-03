@@ -7,8 +7,8 @@
 // */
 
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 //Frontend of the game
 
@@ -26,17 +26,15 @@ public class Layout extends JFrame {
             for (int j = 0; j < 5; j++) {
                 buttons[i][j] = new JButton();
                 buttons[i][j].setBackground(Color.WHITE);
-                buttons[i][j].setOpaque(true);
                 add(buttons[i][j]);//top left is (0,0) to bottom right (4,4)
             }
         }
         setSize(500, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        for (int j = 0; j < 5; j++) {
-            final int col = j; // Need final variable for use in inner class
-            
-            for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                final int col = j; // Need final variable for use in inner class
+
                 buttons[i][j].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         // Handle each button click 
@@ -54,12 +52,24 @@ public class Layout extends JFrame {
                                     }
                                 }
                             }
-                        }
+                        }; 
                         game.printBoard();
-                        game.checkWin();
+                        if(game.stopGame()){// Check for win condition after each move
+                            JOptionPane.showMessageDialog(null, "Player " + (game.getCurrentPlayer()-1) + " Wins!");
+                            // Disable all buttons after game ends
+                            for (int r = 0; r < 5; r++) {
+                                for (int c = 0; c < 5; c++) {
+                                    buttons[r][c].setEnabled(false);
+                                }
+                            } 
+                        }
                     }
                 });
             }
         }
+    }
+    public void repeat(){
+        JOptionPane.showConfirmDialog(null, "Would you like to play Connect 4?", "Connect 4", JOptionPane.YES_NO_OPTION);
+        game.resetGame();
     }
 }
