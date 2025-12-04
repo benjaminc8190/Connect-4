@@ -63,6 +63,7 @@ public class Layout extends JFrame {
                                 }
                             } 
                             //showConfirmDialog should probably go here after disabling game, but clear everything first
+                            //JOptionPane.showMessageDialog(null, "Thanks for playing Connect 4!");
                         }
                     }
                 });
