@@ -99,13 +99,14 @@ public class Game{
                     continue;
                 }
 
-                int hold = board[row][col]; //Placeholder Variable that can store all conditions at once when checking
-                winner = hold;//preliminary winner assignment
+                int hold = board[row][col];
+                
                 // Horizontal
                 if ( col <= cols - 4 &&
                 board[row][col+1] == hold &&
                 board[row][col+2] == hold &&
                 board[row][col+3] == hold) {
+                    winner = hold;
                     return true; 
                 }
                 // Vertical
@@ -113,6 +114,7 @@ public class Game{
                 board[row+1][col] == hold &&
                 board[row+2][col] == hold &&
                 board[row+3][col] == hold) {
+                    winner = hold;
                     return true;
                 }
                 // Dia-Left
@@ -120,6 +122,7 @@ public class Game{
                 board[row+1][col+1] == hold &&
                 board[row+2][col+2] == hold &&
                 board[row+3][col+3] == hold) {
+                    winner = hold;
                     return true;
                 }
                 // Dia-Right
@@ -127,11 +130,11 @@ public class Game{
                 board[row+1][col-1] == hold &&
                 board[row+2][col-2] == hold &&
                 board[row+3][col-3] == hold) {
+                    winner = hold;
                     return true;
                 }
             }
         }
-    winner = 0; //reset winner if no win found
     return false;
     }
 
