@@ -5,15 +5,13 @@
 // * Date: 11/29/2025
 // */
 
-import java.util.Scanner;
-
-//Logic of the game
-
 public class Game{
     private final int rows = 5;
     private final int cols = 5;
     private int[][] board;
     private int turns;
+    private int winner;
+
 
     public Game(){
         board = new int[rows][cols];
@@ -31,9 +29,11 @@ public class Game{
     }
 
     public boolean dropPiece(int col){
+        int currentPlayer = getCurrentPlayer();
+
         for(int i=rows-1; i>=0; i--){ // Had to change .length to rows-1 in order for it to place pieces in 0 row
             if(board[i][col]==0){
-                board[i][col]=this.getCurrentPlayer();
+                board[i][col]=currentPlayer;
                 turns++; // Goes to next turn
                 System.out.println("dropPiece(): Piece placed at (" + i + ", " + col + ")");
                 return true;
@@ -59,38 +59,37 @@ public class Game{
     }
     
     // Anthony's Part
-    public void gameStart() {
-        Scanner scanner = new Scanner(System.in); // Reads User Input 	
+    // public void gameStart() {
+    //     Scanner scanner = new Scanner(System.in); // Reads User Input 	
         
-        while (true) {
-            System.out.println("Player " + getCurrentPlayer() + ", choose a column (0-4):");
-            int colChoice = scanner.nextInt(); // Made colChoice as to differentiate with cols
+    //     while (true) {
+    //         System.out.println("Player " + getCurrentPlayer() + ", choose a column (0-4):");
+    //         int colChoice = scanner.nextInt(); // Made colChoice as to differentiate with cols
             
-        if (colChoice < 0 || colChoice >= cols) { // colChoice can't be -1 or over 4
-            System.out.println("Invalid column. Try again.");
-            continue; // ask again
-        }
+    //     if (colChoice < 0 || colChoice >= cols) { // colChoice can't be -1 or over 4
+    //         System.out.println("Invalid column. Try again.");
+    //         continue; // ask again
+    //     }
 
-        if (board[0][colChoice] != 0) { // Needed a way to check the column is full.
-            System.out.println("Column full. Choose another.");
-            continue; // ask again
-        }
+    //     if (board[0][colChoice] != 0) { // Needed a way to check the column is full.
+    //         System.out.println("Column full. Choose another.");
+    //         continue; // ask again
+    //     }
 
-        dropPiece(colChoice); // Uses dropPiece();
-        printBoard(); // Prints the board
-        CheckWin(); // Plays Mechanism
-        if (CheckWin() == true) { // If there is the win condition
-            turns--;  //Reverts the current turn order
-            System.out.println("Player " + getCurrentPlayer() + " Wins!"); // Prints the winner
-            break; //Breaks
-        }
-        else {
-            continue; // Otherwise play as normal
-            }
-        }
-    }
+    //     dropPiece(colChoice); // Uses dropPiece();
+    //     printBoard(); // Prints the board
+    //     checkWin(); // Plays Mechanism
+    //     if (checkWin() == true) { // If there is the win condition
+    //         System.out.println("Player " + getCurrentPlayer() + " Wins!"); // Prints the winner
+    //         break; //Breaks
+    //     }
+    //     else {
+    //         continue; // Otherwise play as normal
+    //         }
+    //     }
+    // }
 
-    public boolean CheckWin() {
+    public boolean checkWin() {
         
         // Loops and Checks every row and column
         for (int row = 0; row < rows; row++) { 
@@ -101,6 +100,7 @@ public class Game{
                 }
 
                 int hold = board[row][col]; //Placeholder Variable that can store all conditions at once when checking
+                winner = hold;//preliminary winner assignment
                 // Horizontal
                 if ( col <= cols - 4 &&
                 board[row][col+1] == hold &&
@@ -131,12 +131,13 @@ public class Game{
                 }
             }
         }
+    winner = 0; //reset winner if no win found
     return false;
     }
 
     public boolean stopGame() {
-        if (CheckWin() == true) {
-            System.out.println("Player " + (getCurrentPlayer()-1) + " Wins!");
+        if (checkWin()) {
+            System.out.println("Player " + winner + " Wins!");
             return true;
         }
         return false;
@@ -146,6 +147,11 @@ public class Game{
     public void resetGame() {
         board = new int[rows][cols];
         turns = 0;
+        winner = 0;
+    }
+
+    public int getWinner() {
+        return winner;
     }
 }
 
