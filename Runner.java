@@ -13,6 +13,5 @@ public class Runner{
         JOptionPane.showMessageDialog(null, "Welcome to Connect 4! Player 1 is Red and Player 2 is Yellow. Click on the column you want to drop your piece in. First to connect 4 pieces wins!");
         Layout game = new Layout();
         game.setVisible(true);
-        JOptionPane.showMessageDialog(null, "Thanks for playing Connect 4!");
     }
 }
