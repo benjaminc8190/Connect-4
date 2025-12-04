@@ -147,13 +147,5 @@ public class Game{
         board = new int[rows][cols];
         turns = 0;
     }
-
-// public static void main(String[] args) {
-// 	Game g = new Game(); // Game Object
-// 	g.printBoard(); // Prints Board
-// 	g.gameStart(); // Starts Game
-// 	}
-
 }
 
-// !! Updating with replay system !!

@@ -56,7 +56,7 @@ public class Layout extends JFrame {
                         }; 
                         game.printBoard();
                         if(game.stopGame()){// Check for win condition after each move
-                            JOptionPane.showMessageDialog(null, "Player " + (game.getCurrentPlayer()-1) + " Wins!");
+                            JOptionPane.showMessageDialog(null, "Player " + game.getCurrentPlayer() + " Wins!");
                             // Disable all buttons after game ends
                             for (int r = 0; r < 5; r++) {
                                 for (int c = 0; c < 5; c++) {
