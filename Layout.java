@@ -14,6 +14,7 @@ import javax.swing.*;
 
 public class Layout extends JFrame {
     private Game game; // Instance of the Game class to manage game logic
+    private JButton[][] buttons; // 2D array of buttons for the grid
 
     public Layout(){
         game = new Game(); // Initialize the game logic
@@ -21,7 +22,7 @@ public class Layout extends JFrame {
         //Set up for the grid layout
         setLayout(new GridLayout(5, 5, 5, 5));
         setTitle("Connect4 Game");
-        JButton[][] buttons = new JButton[5][5];//2D array of buttons
+        buttons = new JButton[5][5];//2D array of buttons
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 buttons[i][j] = new JButton();
@@ -60,18 +61,34 @@ public class Layout extends JFrame {
                             for (int r = 0; r < 5; r++) {
                                 for (int c = 0; c < 5; c++) {
                                     buttons[r][c].setEnabled(false);
+                                    buttons[r][c].setBackground(Color.WHITE);
                                 }
                             } 
-                            //showConfirmDialog should probably go here after disabling game, but clear everything first
-                            //JOptionPane.showMessageDialog(null, "Thanks for playing Connect 4!");
+                            if(repeat()){
+                                // Re-enable buttons for new game
+                                for (int r = 0; r < 5; r++) {
+                                    for (int c = 0; c < 5; c++) {
+                                        buttons[r][c].setEnabled(true);
+                                    }
+                                }
+                            }
+                            
                         }
                     }
                 });
             }
         }
-    }
-    public void repeat(){
-        JOptionPane.showConfirmDialog(null, "Would you like to play Connect 4?", "Connect 4", JOptionPane.YES_NO_OPTION);
-        game.resetGame();
+    }//
+    public boolean repeat(){
+        int choice = JOptionPane.showConfirmDialog(null, "Would you like to play Connect 4?", "Connect 4",JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            System.out.println("Starting new game...");
+            game.resetGame();
+            return true;
+        } else {
+            System.out.println("Exiting game...");
+            System.exit(0);
+            return false;
+        }
     }
 }
