@@ -62,6 +62,7 @@ public class Layout extends JFrame {
                                     buttons[r][c].setEnabled(false);
                                 }
                             } 
+                            //showConfirmDialog should probably go here after disabling game, but clear everything first
                         }
                     }
                 });
