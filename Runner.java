@@ -4,6 +4,10 @@
 // * Final Programming Project
 // * Author: Benjamin Chau, Anthony Coates, Jeffrey Perez
 // * Date: 11/24/2025
+//* Notes for our code:
+//* Run in this file(Runner)
+//* Ignore the J-Connect4 file
+//* Only include Game, Layout, and Runner file when running our code
 // */
 
 import javax.swing.*;
